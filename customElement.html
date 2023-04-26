@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Menu</title>
+</head>
+
+<body>
+    <booking-menu></booking-menu>
+
+    <script>
+        customElements.define('booking-menu', class extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+                this.shadowRoot.innerHTML = `
+          <style>
+            :host {
+              display: block;
+              font-family: Arial, sans-serif;
+              width: 300px;
+            }
+            label {
+              display: block;
+              margin-top: 10px;
+            }
+            input {
+              width: 100%;
+              padding: 5px;
+              box-sizing: border-box;
+            }
+            button {
+              display: block;
+              width: 100%;
+              padding: 10px;
+              background-color: #007bff;
+              color: white;
+              font-size: 16px;
+              border: none;
+              cursor: pointer;
+              margin-top: 10px;
+            }
+            button:hover {
+              background-color: #0056b3;
+            }
+          </style>
+          <form>
+            ${['Destination', 'Nationality', 'Check-in', 'Check-out', 'Rooms', 'People'].map((label, i) => {
+                    const id = label.toLowerCase().replace(/[^a-z]+/g, '');
+                    const type = ['text', 'text', 'date', 'date', 'number', 'number'][i];
+                    const minAttr = (type === 'number') ? ' min="1"' : '';
+                    return `
+                <div>
+                  <label for="${id}">${label}:</label>
+                  <input type="${type}" id="${id}" name="${id}"${minAttr}>
+                </div>`;
+                }).join('')}
+            <button type="submit">Submit</button>
+          </form>
+        `;
+                this.shadowRoot.querySelector('form').addEventListener('submit', e => {
+                    e.preventDefault();
+                    const formData = new FormData(e.target);
+                    const bookingData = {};
+                    formData.forEach((value, key) => bookingData[key] = value);
+                    console.log('Booking data:', bookingData);
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
