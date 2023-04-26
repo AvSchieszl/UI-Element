@@ -9,13 +9,10 @@
 
 <body>
     <booking-menu></booking-menu>
-
     <script>
         customElements.define('booking-menu', class extends HTMLElement {
             constructor() {
-                super();
-                this.attachShadow({ mode: 'open' });
-                this.shadowRoot.innerHTML = `
+                super().attachShadow({ mode: 'open' }).innerHTML = `
           <style>
             :host {
               display: block;
@@ -47,19 +44,14 @@
             }
           </style>
           <form>
-            ${['Destination', 'Nationality', 'Check-in', 'Check-out', 'Rooms', 'People'].map((label, i) => {
-                    const id = label.toLowerCase().replace(/[^a-z]+/g, '');
-                    const type = ['text', 'text', 'date', 'date', 'number', 'number'][i];
-                    const minAttr = (type === 'number') ? ' min="1"' : '';
-                    return `
-                <div>
-                  <label for="${id}">${label}:</label>
-                  <input type="${type}" id="${id}" name="${id}"${minAttr}>
-                </div>`;
-                }).join('')}
+            ${['Destination', 'Nationality', 'Check-in', 'Check-out', 'Rooms', 'People'].map((label, i) => `
+              <div>
+                <label for="${label.toLowerCase().replace(/[^a-z]+/g, '')}">${label}:</label>
+                <input type="${['text', 'text', 'date', 'date', 'number', 'number'][i]}" id="${label.toLowerCase().replace(/[^a-z]+/g, '')}" name="${label.toLowerCase().replace(/[^a-z]+/g, '')}"${(['', '', " min='1'", " min='1'"])[i]}>
+              </div>
+            `).join('')}
             <button type="submit">Submit</button>
-          </form>
-        `;
+          </form>`;
                 this.shadowRoot.querySelector('form').addEventListener('submit', e => {
                     e.preventDefault();
                     const formData = new FormData(e.target);
