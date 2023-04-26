@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Menu</title>
+</head>
+
+<body>
+    <div id="bookingMenu"></div>
+
+    <script>
+        (function () {
+            const style = document.createElement("style");
+            style.innerHTML = "#bookingMenu{font-family:Arial,sans-serif;width:300px}#bookingMenu label{display:block;margin-top:10px}#bookingMenu input{width:100%;padding:5px;box-sizing:border-box}#bookingMenu button{display:block;width:100%;padding:10px;background-color:#007bff;color:white;font-size:16px;border:none;cursor:pointer;margin-top:10px}#bookingMenu button:hover{background-color:#0056b3}";
+            document.head.appendChild(style);
+
+            const fieldNames = ["destination", "nationality", "checkIn", "checkOut", "rooms", "people"];
+            const labels = ["Destination", "Nationality", "Check-in", "Check-out", "Rooms", "People"];
+            const bookingMenu = document.getElementById("bookingMenu");
+
+            (function () {
+                const form = document.createElement("form");
+
+                fieldNames.forEach((fieldName, index) => {
+                    const field = document.createElement("div");
+                    const label = document.createElement("label");
+                    const input = document.createElement("input");
+
+                    label.htmlFor = fieldName;
+                    label.textContent = labels[index] + ":";
+                    input.id = fieldName;
+
+                    if (fieldName === "checkIn" || fieldName === "checkOut") {
+                        input.type = "date";
+                    } else if (fieldName === "rooms" || fieldName === "people") {
+                        input.type = "number";
+                        input.min = 1;
+                    } else {
+                        input.type = "text";
+                    }
+
+                    input.name = fieldName;
+
+                    field.appendChild(label);
+                    field.appendChild(input);
+                    form.appendChild(field);
+                });
+
+                const submitButton = document.createElement("button");
+                submitButton.type = "submit";
+                submitButton.textContent = "Submit";
+                form.appendChild(submitButton);
+
+                form.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    const formData = new FormData(event.target);
+                    const bookingData = {};
+
+                    formData.forEach((value, key) => {
+                        bookingData[key] = value;
+                    });
+
+                    console.log("Booking data:", bookingData);
+                });
+
+                bookingMenu.appendChild(form);
+            })();
+        })();
+    </script>
+</body>
+
+</html>
